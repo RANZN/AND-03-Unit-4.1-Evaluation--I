@@ -29,6 +29,7 @@
 
             <TextView
                 android:id="@+id/tvEventName"
+                android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="9" />
@@ -48,6 +49,8 @@
 
             <TextView
                 android:id="@+id/tvEventDate"
+                android:textSize="18sp"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="9" />
@@ -69,6 +72,8 @@
                 android:id="@+id/tvEventLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
+
                 android:layout_weight="9" />
         </LinearLayout>
 
@@ -86,6 +91,8 @@
 
             <TextView
                 android:id="@+id/tvEventPrice"
+                android:textSize="18sp"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="9" />
@@ -106,6 +113,7 @@
             <TextView
                 android:id="@+id/tvEventDesc"
                 android:layout_width="wrap_content"
+                android:textSize="18sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="9" />
         </LinearLayout>

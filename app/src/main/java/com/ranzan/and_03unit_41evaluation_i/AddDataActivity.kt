@@ -26,5 +26,11 @@ class AddDataActivity : AppCompatActivity() {
             val intent = Intent(AddDataActivity@ this, MainActivity::class.java)
             startActivity(intent)
         }
+       modifyData()
+    }
+
+    private fun modifyData() {
+
+
     }
 }

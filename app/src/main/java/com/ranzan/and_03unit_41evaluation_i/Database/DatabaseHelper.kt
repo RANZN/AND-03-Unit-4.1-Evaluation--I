@@ -75,4 +75,47 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
         }
         return list
     }
+
+    fun getData(id: Int): DatabaseModel {
+        val db = readableDatabase
+        var databaseModel: DatabaseModel? = null
+        val query = "SELECT * FROM $TABLE_NAME WHERE Id=$id"
+        val cursor = db.rawQuery(query, null)
+        if (cursor != null && cursor.count > 0) {
+            cursor.moveToFirst()
+            val idIndex = cursor.getColumnIndex(ID)
+            val nameIndex = cursor.getColumnIndex(EventName)
+            val dateIndex = cursor.getColumnIndex(EventDate)
+            val descIndex = cursor.getColumnIndex(EventDesc)
+            val locationIndex = cursor.getColumnIndex(EventLocation)
+            val priceIndex = cursor.getColumnIndex(EventPrice)
+
+            val id = cursor.getInt(idIndex)
+            val name = cursor.getString(nameIndex)
+            val date = cursor.getString(dateIndex)
+            val desc = cursor.getString(descIndex)
+            val location = cursor.getString(locationIndex)
+            val price = cursor.getInt(priceIndex)
+            databaseModel = DatabaseModel(id, name, date, location, price, desc)
+
+        }
+        return databaseModel!!
+    }
+
+    fun updateData(d: DatabaseModel) {
+        val db = writableDatabase
+        val values = ContentValues()
+        values.put(ID, d.id)
+        values.put(EventName, d.eventName)
+        values.put(EventDate, d.eventDate)
+        values.put(EventLocation, d.eventLocation)
+        values.put(EventPrice, d.eventPrice)
+        values.put(EventDesc, d.eventDesc)
+        db.update(TABLE_NAME, values, "Id=${d.id}", null)
+    }
+
+    fun delete(id: Int) {
+        val db = writableDatabase
+        db.delete(TABLE_NAME, "Id=$id", null)
+    }
 }
