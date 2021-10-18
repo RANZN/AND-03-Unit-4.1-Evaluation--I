@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.widget.Toast
 
 class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "db", null, 1) {
     companion object {
@@ -111,11 +112,15 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
         values.put(EventLocation, d.eventLocation)
         values.put(EventPrice, d.eventPrice)
         values.put(EventDesc, d.eventDesc)
-        db.update(TABLE_NAME, values, "Id=${d.id}", null)
+        val affected = db.update(TABLE_NAME, values, "Id=${d.id}", null)
+        if (affected > 0) Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
+        else Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
     }
 
     fun delete(id: Int) {
         val db = writableDatabase
-        db.delete(TABLE_NAME, "Id=$id", null)
+        val affected = db.delete(TABLE_NAME, "Id=$id", null)
+        if (affected > 0) Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show()
+        else Toast.makeText(context, "Failed to Delete", Toast.LENGTH_SHORT).show()
     }
 }

@@ -37,5 +37,4 @@ class MainActivity : AppCompatActivity(), Listener {
         intent.putExtra("pos", pos)
     }
 
-
 }
