@@ -1,6 +1,8 @@
 package com.ranzan.and_03unit_41evaluation_i
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ranzan.and_03unit_41evaluation_i.Database.DatabaseHelper
 import kotlinx.android.synthetic.main.activity_add_data.*
@@ -12,7 +14,7 @@ class AddDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_data)
         dataBase = DatabaseHelper(this)
-        addDataBtn.setOnClickListener {
+        submitButton.setOnClickListener {
             dataBase.addDBData(
                 eventName.text.toString(),
                 eventDate.text.toString(),
@@ -20,6 +22,9 @@ class AddDataActivity : AppCompatActivity() {
                 eventDesc.text.toString(),
                 eventPrice.text.toString().toInt()
             )
+            Toast.makeText(this, "Data Added", Toast.LENGTH_SHORT).show()
+            val intent = Intent(AddDataActivity@ this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 }

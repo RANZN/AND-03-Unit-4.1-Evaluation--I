@@ -19,7 +19,12 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
     //    n (Id, event_name, event_desc, event_date, event_location, event_price) - 2pts
     override fun onCreate(p0: SQLiteDatabase?) {
         val res =
-            "CREATE TABLE $TABLE_NAME($ID PRIMARY KEY,$EventName,$EventDesc,$EventDate,$EventLocation,$event_price)"
+            "CREATE TABLE $TABLE_NAME($ID INTEGER PRIMARY KEY," +
+                    "$EventName text," +
+                    "$EventDesc text," +
+                    "$EventDate text," +
+                    "$EventLocation text," +
+                    "$event_price INTEGER)"
         p0?.execSQL(res)
     }
 
@@ -34,7 +39,7 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
         desc: String,
         price: Int
     ) {
-        val db = readableDatabase
+        val db = writableDatabase
         val values = ContentValues()
         values.put(EventName, name)
         values.put(EventDate, date)
@@ -42,5 +47,30 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
         values.put(EventDesc, desc)
         values.put(event_price, price)
         db.insert(TABLE_NAME, null, values)
+    }
+
+    fun getDBList(): MutableList<DatabaseModel> {
+        var list = mutableListOf<DatabaseModel>()
+        val db = readableDatabase
+        val query = "SELECT * FROM $TABLE_NAME"
+        val cursor = db.rawQuery(query, null)
+        if (cursor != null && cursor.count > 0) {
+            cursor.moveToFirst()
+            val idIndex=cursor.getColumnIndex(ID)
+            val nameIndex=cursor.getColumnIndex(EventName)
+            val dateIndex=cursor.getColumnIndex(EventDate)
+            val descIndex=cursor.getColumnIndex(EventDesc)
+            val locationIndex=cursor.getColumnIndex(EventLocation)
+            do {
+                val id=cursor.getInt(idIndex)
+                val name=cursor.getString(nameIndex)
+                val date=cursor.getString(dateIndex)
+                val desc=cursor.getString(descIndex)
+
+
+            } while (cursor.moveToNext())
+        }
+        return list
+
     }
 }
