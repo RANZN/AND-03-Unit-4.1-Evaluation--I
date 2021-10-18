@@ -20,7 +20,15 @@ class MainActivity : AppCompatActivity(), Listener {
             startActivity(intent)
         }
         dataBase = DatabaseHelper(this)
-
+        list = dataBase.getDBList()
+        setRecyclerView()
+        searchButton.setOnClickListener {
+            if (searchItem.text.isNotEmpty()) {
+//                list.contains()
+                list = dataBase.getSearchedList(searchItem.text.toString())
+                setRecyclerView()
+            }
+        }
     }
 
     private fun setRecyclerView() {
@@ -35,11 +43,5 @@ class MainActivity : AppCompatActivity(), Listener {
         val intent = Intent(MainActivity@ this, AddDataActivity::class.java)
         intent.putExtra("pos", pos)
         startActivity(intent)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        list = dataBase.getDBList()
-        setRecyclerView()
     }
 }

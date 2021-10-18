@@ -77,6 +77,33 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
         return list
     }
 
+    fun getSearchedList(name: String): MutableList<DatabaseModel> {
+        var list = mutableListOf<DatabaseModel>()
+        val db = readableDatabase
+        val query = "SELECT * FROM $TABLE_NAME WHERE $EventName like?"
+        val cursor = db.rawQuery(query, arrayOf("%$name%"))
+        if (cursor != null && cursor.count > 0) {
+            cursor.moveToFirst()
+            val idIndex = cursor.getColumnIndex(ID)
+            val nameIndex = cursor.getColumnIndex(EventName)
+            val dateIndex = cursor.getColumnIndex(EventDate)
+            val descIndex = cursor.getColumnIndex(EventDesc)
+            val locationIndex = cursor.getColumnIndex(EventLocation)
+            val priceIndex = cursor.getColumnIndex(EventPrice)
+            do {
+                val id = cursor.getInt(idIndex)
+                val name = cursor.getString(nameIndex)
+                val date = cursor.getString(dateIndex)
+                val desc = cursor.getString(descIndex)
+                val location = cursor.getString(locationIndex)
+                val price = cursor.getInt(priceIndex)
+                val databaseModel = DatabaseModel(id, name, date, location, price, desc)
+                list.add(databaseModel)
+            } while (cursor.moveToNext())
+        }
+        return list
+    }
+
     fun getData(id: Int): DatabaseModel {
         val db = readableDatabase
         var databaseModel: DatabaseModel? = null
@@ -119,9 +146,13 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
         values.put(EventLocation, location)
         values.put(EventPrice, price)
         values.put(EventDesc, desc)
-        db.update(TABLE_NAME, values, "$ID== $id", null)
-//        if (affected > 0) Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
-//        else Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
+        val affected = db.update(TABLE_NAME, values, "$ID== $id", null)
+        if (affected > 0) Toast.makeText(
+            context,
+            "Updated Successfully",
+            Toast.LENGTH_SHORT
+        ).show()
+        else Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
     }
 
     fun delete(id: Int) {
