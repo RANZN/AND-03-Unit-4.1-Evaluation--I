@@ -13,7 +13,7 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
         const val EventDesc = "event_desc"
         const val EventDate = "event_date"
         const val EventLocation = "event_location"
-        const val event_price = "event_price"
+        const val EventPrice = "event_price"
     }
 
     //    n (Id, event_name, event_desc, event_date, event_location, event_price) - 2pts
@@ -24,7 +24,7 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
                     "$EventDesc text," +
                     "$EventDate text," +
                     "$EventLocation text," +
-                    "$event_price INTEGER)"
+                    "$EventPrice INTEGER)"
         p0?.execSQL(res)
     }
 
@@ -45,7 +45,7 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
         values.put(EventDate, date)
         values.put(EventLocation, location)
         values.put(EventDesc, desc)
-        values.put(event_price, price)
+        values.put(EventPrice, price)
         db.insert(TABLE_NAME, null, values)
     }
 
@@ -56,21 +56,23 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
         val cursor = db.rawQuery(query, null)
         if (cursor != null && cursor.count > 0) {
             cursor.moveToFirst()
-            val idIndex=cursor.getColumnIndex(ID)
-            val nameIndex=cursor.getColumnIndex(EventName)
-            val dateIndex=cursor.getColumnIndex(EventDate)
-            val descIndex=cursor.getColumnIndex(EventDesc)
-            val locationIndex=cursor.getColumnIndex(EventLocation)
+            val idIndex = cursor.getColumnIndex(ID)
+            val nameIndex = cursor.getColumnIndex(EventName)
+            val dateIndex = cursor.getColumnIndex(EventDate)
+            val descIndex = cursor.getColumnIndex(EventDesc)
+            val locationIndex = cursor.getColumnIndex(EventLocation)
+            val priceIndex = cursor.getColumnIndex(EventPrice)
             do {
-                val id=cursor.getInt(idIndex)
-                val name=cursor.getString(nameIndex)
-                val date=cursor.getString(dateIndex)
-                val desc=cursor.getString(descIndex)
-
-
+                val id = cursor.getInt(idIndex)
+                val name = cursor.getString(nameIndex)
+                val date = cursor.getString(dateIndex)
+                val desc = cursor.getString(descIndex)
+                val location = cursor.getString(locationIndex)
+                val price = cursor.getInt(priceIndex)
+                val databaseModel = DatabaseModel(id, name, date, location, price, desc)
+                list.add(databaseModel)
             } while (cursor.moveToNext())
         }
         return list
-
     }
 }
