@@ -1,5 +1,6 @@
 package com.ranzan.and_03unit_41evaluation_i.Database
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -26,4 +27,20 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
         TODO("Not yet implemented")
     }
 
+    fun addDBData(
+        name: String,
+        date: String,
+        location: String,
+        desc: String,
+        price: Int
+    ) {
+        val db = readableDatabase
+        val values = ContentValues()
+        values.put(EventName, name)
+        values.put(EventDate, date)
+        values.put(EventLocation, location)
+        values.put(EventDesc, desc)
+        values.put(event_price, price)
+        db.insert(TABLE_NAME, null, values)
+    }
 }
