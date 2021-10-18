@@ -20,12 +20,11 @@ class MainActivity : AppCompatActivity(), Listener {
             startActivity(intent)
         }
         dataBase = DatabaseHelper(this)
-        list = dataBase.getDBList()
-        setRecyclerView()
+
     }
 
     private fun setRecyclerView() {
-        recyclerViewAdapter = RecyclerViewAdapter(list)
+        recyclerViewAdapter = RecyclerViewAdapter(list,this)
         recyclerView.run {
             adapter = recyclerViewAdapter
             layoutManager = LinearLayoutManager(context)
@@ -35,6 +34,12 @@ class MainActivity : AppCompatActivity(), Listener {
     override fun getData(pos: Int) {
         val intent = Intent(MainActivity@ this, AddDataActivity::class.java)
         intent.putExtra("pos", pos)
+        startActivity(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        list = dataBase.getDBList()
+        setRecyclerView()
+    }
 }

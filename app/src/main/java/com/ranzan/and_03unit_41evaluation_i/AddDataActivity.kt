@@ -15,40 +15,55 @@ class AddDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_data)
         dataBase = DatabaseHelper(this)
-        submitButton.setOnClickListener {
-            dataBase.addDBData(
-                eventName.text.toString(),
-                eventDate.text.toString(),
-                eventLocation.text.toString(),
-                eventDesc.text.toString(),
-                eventPrice.text.toString().toInt()
-            )
-            Toast.makeText(this, "Data Added", Toast.LENGTH_SHORT).show()
-            val intent = Intent(AddDataActivity@ this, MainActivity::class.java)
-            startActivity(intent)
-        }
+
         if (intent != null && intent.extras != null) {
             val pos = intent.getIntExtra("pos", 0)
             modifyData(pos)
+        } else {
+            submitButton.setOnClickListener {
+                dataBase.addDBData(
+                    eventName.text.toString(),
+                    eventDate.text.toString(),
+                    eventLocation.text.toString(),
+                    eventDesc.text.toString(),
+                    eventPrice.text.toString().toInt()
+                )
+                Toast.makeText(this, "Data Added", Toast.LENGTH_SHORT).show()
+                val intent = Intent(AddDataActivity@ this, MainActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
     private fun modifyData(pos: Int) {
         deleteButton.visibility = View.VISIBLE
         val databaseModel = dataBase.getData(pos)
-        eventName.setText(databaseModel.eventName)
-        eventDate.setText(databaseModel.eventDate)
-        eventLocation.setText(databaseModel.eventLocation)
-        eventDesc.setText(databaseModel.eventDesc)
-        eventPrice.setText(databaseModel.eventPrice)
         val id = databaseModel.id
+        val name = databaseModel.eventName
+        val date = databaseModel.eventDate
+        val location = databaseModel.eventLocation
+        val desc = databaseModel.eventDesc
+        val price = databaseModel.eventPrice
+        eventName.setText(name)
+        eventDate.setText(date)
+        eventLocation.setText(location)
+        eventDesc.setText(desc)
+        eventPrice.setText(price.toString())
+
         deleteButton.setOnClickListener {
             dataBase.delete(id)
             val intent = Intent(AddDataActivity@ this, MainActivity::class.java)
             startActivity(intent)
         }
         submitButton.setOnClickListener {
-            dataBase.updateData(databaseModel)
+            dataBase.updateData(
+                id,
+                eventName.text.toString(),
+                eventDate.text.toString(),
+                eventLocation.text.toString(),
+                eventDesc.text.toString(),
+                eventPrice.text.toString().toInt()
+            )
             val intent = Intent(AddDataActivity@ this, MainActivity::class.java)
             startActivity(intent)
         }

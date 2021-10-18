@@ -103,18 +103,25 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, "
         return databaseModel!!
     }
 
-    fun updateData(d: DatabaseModel) {
+    fun updateData(
+        id: Int,
+        name: String,
+        date: String,
+        location: String,
+        desc: String,
+        price: Int
+    ) {
         val db = writableDatabase
         val values = ContentValues()
-        values.put(ID, d.id)
-        values.put(EventName, d.eventName)
-        values.put(EventDate, d.eventDate)
-        values.put(EventLocation, d.eventLocation)
-        values.put(EventPrice, d.eventPrice)
-        values.put(EventDesc, d.eventDesc)
-        val affected = db.update(TABLE_NAME, values, "Id=${d.id}", null)
-        if (affected > 0) Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
-        else Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
+        values.put(ID, id)
+        values.put(EventName, name)
+        values.put(EventDate, date)
+        values.put(EventLocation, location)
+        values.put(EventPrice, price)
+        values.put(EventDesc, desc)
+        db.update(TABLE_NAME, values, "$ID== $id", null)
+//        if (affected > 0) Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
+//        else Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
     }
 
     fun delete(id: Int) {
